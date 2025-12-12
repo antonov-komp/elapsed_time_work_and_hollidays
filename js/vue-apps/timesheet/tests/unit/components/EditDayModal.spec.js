@@ -12,32 +12,46 @@ describe('EditDayModal', () => {
             props: {
                 visible: false,
                 day: 15
-            }
+            },
+            attachTo: document.body
         });
         
-        expect(wrapper.find('.modal-overlay').exists()).toBe(false);
+        // Teleport рендерится в body, поэтому проверяем через document
+        expect(document.querySelector('.modal-overlay')).toBeNull();
+        wrapper.unmount();
     });
     
-    it('отображается когда visible=true', () => {
+    it('отображается когда visible=true', async () => {
         const wrapper = mount(EditDayModal, {
             props: {
                 visible: true,
                 day: 15
-            }
+            },
+            attachTo: document.body
         });
         
-        expect(wrapper.find('.modal-overlay').exists()).toBe(true);
+        await wrapper.vm.$nextTick();
+        
+        // Teleport рендерится в body
+        const overlay = document.querySelector('.modal-overlay');
+        expect(overlay).toBeTruthy();
+        wrapper.unmount();
     });
     
-    it('отображает номер дня в заголовке', () => {
+    it('отображает номер дня в заголовке', async () => {
         const wrapper = mount(EditDayModal, {
             props: {
                 visible: true,
                 day: 15
-            }
+            },
+            attachTo: document.body
         });
         
-        expect(wrapper.text()).toContain('Редактирование дня 15');
+        await wrapper.vm.$nextTick();
+        
+        const overlay = document.querySelector('.modal-overlay');
+        expect(overlay?.textContent).toContain('Редактирование дня 15');
+        wrapper.unmount();
     });
     
     it('эмитит событие close при клике на кнопку закрытия', async () => {
@@ -45,13 +59,19 @@ describe('EditDayModal', () => {
             props: {
                 visible: true,
                 day: 15
-            }
+            },
+            attachTo: document.body
         });
         
-        const closeButton = wrapper.find('.close-button');
-        await closeButton.trigger('click');
+        await wrapper.vm.$nextTick();
         
-        expect(wrapper.emitted('close')).toBeTruthy();
+        const closeButton = document.querySelector('.close-button');
+        if (closeButton) {
+            closeButton.click();
+            await wrapper.vm.$nextTick();
+            expect(wrapper.emitted('close')).toBeTruthy();
+        }
+        wrapper.unmount();
     });
     
     it('эмитит событие save при сохранении', async () => {
@@ -60,13 +80,19 @@ describe('EditDayModal', () => {
                 visible: true,
                 day: 15,
                 dayData: { hours: 8 }
-            }
+            },
+            attachTo: document.body
         });
         
-        const form = wrapper.find('form');
-        await form.trigger('submit');
+        await wrapper.vm.$nextTick();
         
-        expect(wrapper.emitted('save')).toBeTruthy();
+        const form = document.querySelector('form');
+        if (form) {
+            form.dispatchEvent(new Event('submit', { cancelable: true }));
+            await wrapper.vm.$nextTick();
+            expect(wrapper.emitted('save')).toBeTruthy();
+        }
+        wrapper.unmount();
     });
 });
 

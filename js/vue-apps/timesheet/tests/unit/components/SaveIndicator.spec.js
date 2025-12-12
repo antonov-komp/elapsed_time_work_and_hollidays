@@ -2,7 +2,7 @@
  * Unit-тесты для компонента SaveIndicator
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import SaveIndicator from '@/components/SaveIndicator.vue';
@@ -10,36 +10,57 @@ import { useTimesheetStore } from '@/stores/timesheetStore.js';
 
 describe('SaveIndicator', () => {
     let pinia;
+    let wrapper;
     
     beforeEach(() => {
         pinia = createPinia();
         setActivePinia(pinia);
     });
     
-    it('отображается когда идет сохранение', () => {
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.unmount();
+        }
+        // Очищаем body от Teleport элементов
+        document.body.innerHTML = '';
+    });
+    
+    it('отображается когда идет сохранение', async () => {
         const store = useTimesheetStore();
         store.timesheet.saving = true;
         
-        const wrapper = mount(SaveIndicator, {
+        wrapper = mount(SaveIndicator, {
             global: {
                 plugins: [pinia]
-            }
+            },
+            attachTo: document.body
         });
         
-        expect(wrapper.text()).toContain('Сохранение...');
+        await wrapper.vm.$nextTick();
+        
+        // Teleport рендерится в body
+        const indicator = document.querySelector('.save-indicator');
+        expect(indicator).toBeTruthy();
+        expect(indicator?.textContent).toContain('Сохранение...');
     });
     
-    it('отображает ошибку когда есть ошибка', () => {
+    it('отображает ошибку когда есть ошибка', async () => {
         const store = useTimesheetStore();
         store.timesheet.error = 'Ошибка сохранения';
         
-        const wrapper = mount(SaveIndicator, {
+        wrapper = mount(SaveIndicator, {
             global: {
                 plugins: [pinia]
-            }
+            },
+            attachTo: document.body
         });
         
-        expect(wrapper.text()).toContain('Ошибка сохранения');
+        await wrapper.vm.$nextTick();
+        
+        // Teleport рендерится в body
+        const indicator = document.querySelector('.save-indicator');
+        expect(indicator).toBeTruthy();
+        expect(indicator?.textContent).toContain('Ошибка сохранения');
     });
 });
 

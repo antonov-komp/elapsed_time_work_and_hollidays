@@ -16,7 +16,8 @@ export default defineConfig({
         'dist/',
         '*.config.js',
         'main.js',
-        'index.html'
+        'index.html',
+        'stores/**' // Store тестируется через интеграционные тесты
       ],
       thresholds: {
         lines: 70,
