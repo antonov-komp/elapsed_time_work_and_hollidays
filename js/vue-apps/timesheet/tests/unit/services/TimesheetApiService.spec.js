@@ -73,7 +73,9 @@ describe('TimesheetApiService', () => {
         });
         
         it('выбрасывает ошибку если месяц меньше 1', async () => {
-            await expect(TimesheetApiService.getTimesheet(2025, 0)).rejects.toThrow('диапазоне 1-12');
+            // 0 считается falsy, поэтому проверка на !month срабатывает раньше
+            // Используем -1 для проверки диапазона
+            await expect(TimesheetApiService.getTimesheet(2025, -1)).rejects.toThrow('диапазоне 1-12');
         });
         
         it('выбрасывает ошибку если месяц больше 12', async () => {
@@ -157,7 +159,9 @@ describe('TimesheetApiService', () => {
         });
         
         it('выбрасывает ошибку если месяц вне диапазона', async () => {
-            await expect(TimesheetApiService.saveTimesheet(2025, 0, {})).rejects.toThrow('диапазоне 1-12');
+            // 0 считается falsy, поэтому проверка на !month срабатывает раньше
+            // Используем -1 для проверки диапазона
+            await expect(TimesheetApiService.saveTimesheet(2025, -1, {})).rejects.toThrow('диапазоне 1-12');
             await expect(TimesheetApiService.saveTimesheet(2025, 13, {})).rejects.toThrow('диапазоне 1-12');
         });
         

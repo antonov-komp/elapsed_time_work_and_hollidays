@@ -192,6 +192,10 @@ describe('HolidaysService', () => {
                 .mockResolvedValueOnce({
                     ok: true,
                     json: async () => ({ success: true, data: holidays2026 })
+                })
+                .mockResolvedValueOnce({
+                    ok: true,
+                    json: async () => ({ success: true, data: holidays2025 })
                 });
             
             await HolidaysService.getHolidays(2025);
@@ -218,6 +222,10 @@ describe('HolidaysService', () => {
                 .mockResolvedValueOnce({
                     ok: true,
                     json: async () => ({ success: true, data: holidays2026 })
+                })
+                .mockResolvedValueOnce({
+                    ok: true,
+                    json: async () => ({ success: true, data: holidays2025 })
                 });
             
             await HolidaysService.getHolidays(2025);
