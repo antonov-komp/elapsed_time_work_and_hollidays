@@ -132,28 +132,38 @@ function handleFillWeek() {
 </script>
 
 <style scoped>
+/**
+ * Стили компонента кнопки "Заполнить неделю"
+ * 
+ * Соответствуют гайдлайнам Bitrix24
+ */
+
 .fill-week-button {
-  padding: 10px 20px;
-  background-color: #3498db;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary);
   color: #fff;
   border: none;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s, opacity 0.2s;
+  transition: background-color var(--transition-normal), opacity var(--transition-normal), transform var(--transition-fast);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 150px;
+  min-height: 44px; /* Touch-оптимизация */
+  box-shadow: var(--shadow-sm);
 }
 
 .fill-week-button:hover:not(:disabled) {
-  background-color: #2980b9;
+  background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-md);
 }
 
 .fill-week-button:active:not(:disabled) {
   transform: translateY(1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .fill-week-button:disabled {

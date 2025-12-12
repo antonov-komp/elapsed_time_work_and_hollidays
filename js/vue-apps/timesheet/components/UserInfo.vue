@@ -43,15 +43,24 @@ const fullName = computed(() => {
 </script>
 
 <style scoped>
+/**
+ * Стили компонента информации о пользователе
+ * 
+ * Соответствуют гайдлайнам Bitrix24
+ */
+
 .user-info {
-  padding: 15px;
+  padding: var(--spacing-md);
   background-color: #f5f5f5;
-  border-bottom: 1px solid #ddd;
+  border-bottom: var(--border-width) solid var(--border-color);
 }
 
 .user-data {
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .name {
@@ -59,8 +68,8 @@ const fullName = computed(() => {
 }
 
 .separator {
-  margin: 0 10px;
   color: #999;
+  font-weight: normal;
 }
 
 .position {
@@ -71,10 +80,29 @@ const fullName = computed(() => {
 .loading {
   color: #666;
   font-style: italic;
+  font-size: var(--font-size-md);
 }
 
 .error {
-  color: #dc3545;
-  font-size: 14px;
+  color: var(--color-error);
+  font-size: var(--font-size-md);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .user-info {
+    padding: var(--spacing-sm);
+  }
+  
+  .user-data {
+    font-size: var(--font-size-md);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .separator {
+    display: none;
+  }
 }
 </style>

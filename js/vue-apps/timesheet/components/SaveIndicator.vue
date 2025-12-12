@@ -106,20 +106,56 @@ const indicatorClass = computed(() => {
 }
 
 .save-indicator.saving {
-  border-color: #3498db;
-  color: #3498db;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .save-indicator.saved {
-  border-color: #2ecc71;
-  color: #2ecc71;
+  border-color: var(--color-success);
+  color: var(--color-success);
   background-color: #f0fdf4;
+  animation: successPulse 0.5s ease;
 }
 
 .save-indicator.error {
-  border-color: #e74c3c;
-  color: #e74c3c;
+  border-color: var(--color-error);
+  color: var(--color-error);
   background-color: #fef2f2;
+  animation: errorShake 0.5s ease;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 .indicator-content {

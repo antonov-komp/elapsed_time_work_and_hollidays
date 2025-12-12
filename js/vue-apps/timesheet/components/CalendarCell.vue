@@ -1,6 +1,7 @@
 <template>
   <div 
     :class="cellClasses"
+    :data-status="props.dayData?.status || null"
     @click="handleClick"
     class="calendar-cell"
   >
@@ -141,21 +142,57 @@ const handleClick = () => {
 </script>
 
 <style scoped>
+/**
+ * Стили ячейки календаря
+ * 
+ * Использует цветовую схему из констант COLORS
+ * Соответствует гайдлайнам Bitrix24
+ */
+
 .calendar-cell {
   min-height: 80px;
   padding: 8px;
   border: 1px solid #ddd;
   background-color: #ffffff;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-radius: 4px;
+  position: relative;
 }
 
 .calendar-cell:hover {
   background-color: #f0f0f0;
   border-color: #3498db;
+  transform: scale(1.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Touch-оптимизация для мобильных */
+@media (max-width: 768px) {
+  .calendar-cell {
+    min-height: 60px; /* Увеличено для touch */
+    padding: var(--spacing-xs);
+  }
+  
+  .calendar-cell:hover {
+    transform: none; /* Отключаем hover-эффекты на touch-устройствах */
+  }
+  
+  .calendar-cell:active {
+    background-color: #e0e0e0;
+    transform: scale(0.98);
+  }
+  
+  .day-number {
+    font-size: var(--font-size-sm);
+  }
+  
+  .day-value {
+    font-size: var(--font-size-xs);
+  }
 }
 
 .day-number {
@@ -169,23 +206,42 @@ const handleClick = () => {
   font-size: 12px;
   color: #666;
   margin-top: auto;
+  font-weight: 500;
 }
 
-/* Сегодняшний день */
+/* Рабочий день (по умолчанию) */
+.calendar-cell {
+  background-color: #ffffff; /* COLORS.WORKDAY */
+}
+
+/* Сегодняшний день - яркое выделение */
 .calendar-cell.today {
-  background-color: #e3f2fd;
-  border-color: #2196f3;
-  border-width: 2px;
+  background-color: #e3f2fd; /* COLORS.TODAY */
+  border: 2px solid #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  font-weight: bold;
 }
 
 .calendar-cell.today .day-number {
   color: #1976d2;
   font-weight: bold;
+  font-size: 15px;
+}
+
+.calendar-cell.today::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  background-color: #2196f3;
+  border-radius: 50%;
 }
 
 /* Выходной день */
 .calendar-cell.weekend {
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; /* COLORS.WEEKEND */
 }
 
 .calendar-cell.weekend .day-number {
@@ -194,41 +250,66 @@ const handleClick = () => {
 
 /* Праздничный день */
 .calendar-cell.holiday {
-  background-color: #ffebee;
+  background-color: #ffebee; /* COLORS.HOLIDAY */
 }
 
 .calendar-cell.holiday .day-number {
   color: #c62828;
+  font-weight: bold;
 }
 
-/* День с часами */
+/* День с заполненными часами */
 .calendar-cell.has-hours {
-  background-color: #e8f5e9;
+  background-color: #e8f5e9; /* COLORS.FILLED */
 }
 
 .calendar-cell.has-hours .day-value {
   color: #2e7d32;
   font-weight: bold;
+  font-size: 13px;
 }
 
 /* Неполный день */
 .calendar-cell.incomplete {
-  background-color: #fff9c4;
+  background-color: #fff9c4; /* COLORS.INCOMPLETE */
 }
 
 .calendar-cell.incomplete .day-value {
   color: #f57f17;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 /* День со статусом */
 .calendar-cell.has-status {
-  background-color: #fff3e0;
+  background-color: #fff3e0; /* COLORS.STATUS */
 }
 
 .calendar-cell.has-status .day-value {
   color: #e65100;
   font-weight: bold;
   font-size: 11px;
+  text-align: center;
+  padding: 2px 4px;
+  background-color: rgba(230, 81, 0, 0.1);
+  border-radius: 3px;
+}
+
+/* Специфичные цвета для разных статусов */
+.calendar-cell.has-status[data-status="Больничный"] {
+  background-color: #ffcdd2;
+}
+
+.calendar-cell.has-status[data-status="Командировка"] {
+  background-color: #c8e6c9;
+}
+
+.calendar-cell.has-status[data-status="Отпуск календарный"] {
+  background-color: #b3e5fc;
+}
+
+.calendar-cell.has-status[data-status="Отпуск за свой счёт"] {
+  background-color: #fff9c4;
 }
 </style>
 

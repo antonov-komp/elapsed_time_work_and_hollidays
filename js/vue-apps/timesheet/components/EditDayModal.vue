@@ -231,19 +231,21 @@ function handleOverlayClick(event) {
   justify-content: center;
   align-items: center;
   z-index: 10000;
-  animation: fadeIn 0.2s;
+  animation: fadeIn var(--transition-normal);
+  backdrop-filter: blur(2px);
 }
 
 .modal-content {
   background-color: #fff;
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
   min-width: 400px;
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
-  animation: slideIn 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideIn var(--transition-slow);
+  box-shadow: var(--shadow-lg);
+  transform-origin: center;
 }
 
 .modal-header {
@@ -301,17 +303,19 @@ function handleOverlayClick(event) {
 
 .form-input,
 .form-select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: border-color 0.2s;
+  padding: var(--spacing-sm);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  min-height: 44px; /* Touch-оптимизация */
 }
 
 .form-input:focus,
 .form-select:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(47, 198, 246, 0.2);
 }
 
 .form-input:disabled,
@@ -323,13 +327,13 @@ function handleOverlayClick(event) {
 
 .form-input.error,
 .form-select.error {
-  border-color: #d32f2f;
+  border-color: var(--color-error);
 }
 
 .error-message {
-  color: #d32f2f;
-  font-size: 12px;
-  margin-top: 4px;
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
 }
 
 .form-actions {
@@ -341,22 +345,23 @@ function handleOverlayClick(event) {
 
 .btn-primary,
 .btn-secondary {
-  padding: 10px 20px;
+  padding: var(--spacing-sm) var(--spacing-md);
   border: none;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-normal), opacity var(--transition-normal);
   font-weight: 500;
+  min-height: 44px; /* Touch-оптимизация */
 }
 
 .btn-primary {
-  background-color: #3498db;
+  background-color: var(--color-primary);
   color: #fff;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #2980b9;
+  background-color: var(--color-primary-hover);
 }
 
 .btn-primary:disabled {
@@ -394,25 +399,43 @@ function handleOverlayClick(event) {
   }
 }
 
+/* Адаптивность для планшетов */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .modal-content {
+    min-width: 350px;
+    max-width: 85%;
+  }
+}
+
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   .modal-content {
-    min-width: 90%;
-    max-width: 95%;
-    padding: 15px;
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+    margin: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
   }
   
   .modal-header h3 {
-    font-size: 16px;
+    font-size: var(--font-size-lg);
+  }
+  
+  .form-group input,
+  .form-group select {
+    font-size: var(--font-size-md); /* Предотвращает zoom на iOS */
   }
   
   .form-actions {
     flex-direction: column;
+    gap: var(--spacing-sm);
   }
   
   .btn-primary,
   .btn-secondary {
     width: 100%;
+    min-height: 44px; /* Touch-оптимизация */
   }
 }
 </style>

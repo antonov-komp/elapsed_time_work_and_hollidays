@@ -67,8 +67,11 @@ import UserInfo from './components/UserInfo.vue';
 import PeriodSelector from './components/PeriodSelector.vue';
 import StatisticsBar from './components/StatisticsBar.vue';
 import CalendarGrid from './components/CalendarGrid.vue';
-import EditDayModal from './components/EditDayModal.vue';
 import FillWeekButton from './components/FillWeekButton.vue';
+
+// Ленивая загрузка модального окна (загружается только при открытии)
+import { defineAsyncComponent } from 'vue';
+const EditDayModal = defineAsyncComponent(() => import('./components/EditDayModal.vue'));
 
 const store = useTimesheetStore();
 
@@ -208,11 +211,16 @@ watch(
 );
 </script>
 
+<style>
+/* Подключение общих CSS переменных */
+@import './styles/variables.css';
+</style>
+
 <style scoped>
 .timesheet-calendar {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--spacing-lg);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 

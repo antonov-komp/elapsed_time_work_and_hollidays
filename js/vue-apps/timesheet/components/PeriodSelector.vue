@@ -117,39 +117,67 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/**
+ * Стили компонента выбора периода
+ * 
+ * Соответствуют гайдлайнам Bitrix24
+ */
+
 .period-selector {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 15px;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
   background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
+  border-bottom: var(--border-width) solid var(--border-color);
+  flex-wrap: wrap;
 }
 
 .label {
   font-weight: bold;
   color: #333;
-  font-size: 14px;
+  font-size: var(--font-size-md);
+  white-space: nowrap;
 }
 
 .select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
   background-color: white;
   cursor: pointer;
   min-width: 150px;
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .select:hover {
-  border-color: #3498db;
+  border-color: var(--color-primary);
 }
 
 .select:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(47, 198, 246, 0.2);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .period-selector {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+  
+  .label {
+    font-size: var(--font-size-sm);
+  }
+  
+  .select {
+    width: 100%;
+    min-width: auto;
+    font-size: var(--font-size-md);
+  }
 }
 </style>
 
