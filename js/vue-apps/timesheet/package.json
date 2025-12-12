@@ -1,0 +1,28 @@
+{
+  "name": "timesheet-calendar",
+  "version": "0.1.0",
+  "description": "Интерфейс табеля присутствия для Bitrix24",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bitrix24",
+    "timesheet",
+    "vue",
+    "calendar"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vue": "^3.5.25"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite": "^5.0.0"
+  }
+}

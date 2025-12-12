@@ -21,3 +21,13 @@ Thumbs.db
 vendor/
 composer.lock
 
+# Node.js
+node_modules/
+package-lock.json
+
+# Vite
+dist/
+
+# Данные табеля присутствия
+data/
+
