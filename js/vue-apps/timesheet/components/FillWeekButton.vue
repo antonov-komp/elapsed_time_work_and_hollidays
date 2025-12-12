@@ -139,37 +139,39 @@ function handleFillWeek() {
  */
 
 .fill-week-button {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--color-primary);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+  background-color: var(--color-primary, #2fc6f6);
   color: #fff;
   border: none;
-  border-radius: var(--border-radius-md);
-  font-size: var(--font-size-md);
-  font-weight: 500;
+  border-radius: var(--border-radius-md, 4px);
+  font-size: var(--font-size-md, 14px);
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color var(--transition-normal), opacity var(--transition-normal), transform var(--transition-fast);
+  transition: all var(--transition-normal, 0.2s ease);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 150px;
   min-height: 44px; /* Touch-оптимизация */
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .fill-week-button:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
-  box-shadow: var(--shadow-md);
+  background-color: var(--color-primary-hover, #2eb3d9);
+  box-shadow: var(--shadow-md, 0 2px 4px rgba(0, 0, 0, 0.1));
+  transform: translateY(-1px);
 }
 
 .fill-week-button:active:not(:disabled) {
-  transform: translateY(1px);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .fill-week-button:disabled {
-  background-color: #ccc;
+  background-color: var(--color-text-muted, #ccc);
   cursor: not-allowed;
   opacity: 0.6;
+  transform: none;
 }
 
 .button-text {

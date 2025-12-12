@@ -32,31 +32,37 @@ defineProps({
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.55);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  animation: fadeIn var(--transition-slow);
+  animation: fadeIn var(--transition-slow, 0.3s ease);
+  backdrop-filter: blur(2px);
 }
 
 .preloader-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(243, 243, 243, 0.3);
-  border-top: 4px solid var(--color-primary);
+  width: 56px;
+  height: 56px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid var(--color-primary, #2fc6f6);
+  border-right: 4px solid var(--color-primary, #2fc6f6);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
   position: relative;
+  box-shadow: 0 0 20px rgba(47, 198, 246, 0.3);
 }
 
 .preloader-spinner::after {
   content: '';
   position: absolute;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(47, 198, 246, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(47, 198, 246, 0.3) 0%, transparent 70%);
   animation: pulse 1.5s ease-in-out infinite;
 }
 

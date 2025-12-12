@@ -121,44 +121,59 @@ onMounted(() => {
  * Стили компонента выбора периода
  * 
  * Соответствуют гайдлайнам Bitrix24
+ * Улучшена стилизация согласно TASK-006-02
  */
 
 .period-selector {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  background-color: #f9f9f9;
-  border-bottom: var(--border-width) solid var(--border-color);
+  gap: var(--spacing-md, 16px);
+  padding: var(--spacing-md, 16px);
+  background-color: var(--color-bg-secondary, #f9f9f9);
+  border: var(--border-width, 1px) solid var(--color-border, #ddd);
+  border-radius: var(--border-radius-md, 4px);
   flex-wrap: wrap;
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .label {
-  font-weight: bold;
-  color: #333;
-  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text-primary, #333);
+  font-size: var(--font-size-md, 14px);
   white-space: nowrap;
+  user-select: none;
 }
 
 .select {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: var(--border-width) solid var(--border-color);
-  border-radius: var(--border-radius-md);
-  font-size: var(--font-size-md);
-  background-color: white;
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+  border: var(--border-width, 1px) solid var(--color-border, #ddd);
+  border-radius: var(--border-radius-md, 4px);
+  font-size: var(--font-size-md, 14px);
+  background-color: var(--color-bg-primary, #ffffff);
+  color: var(--color-text-primary, #333);
   cursor: pointer;
   min-width: 150px;
-  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  transition: all var(--transition-normal, 0.2s ease);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-sm, 8px) center;
+  padding-right: calc(var(--spacing-md, 16px) + 20px);
 }
 
 .select:hover {
-  border-color: var(--color-primary);
+  border-color: var(--color-primary, #2fc6f6);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(47, 198, 246, 0.2);
+  border-color: var(--color-primary, #2fc6f6);
+  box-shadow: 0 0 0 3px rgba(47, 198, 246, 0.15);
+}
+
+.select:active {
+  transform: scale(0.98);
 }
 
 /* Адаптивность */
@@ -166,17 +181,19 @@ onMounted(() => {
   .period-selector {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-sm, 8px);
+    padding: var(--spacing-sm, 8px);
   }
   
   .label {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-sm, 12px);
   }
   
   .select {
     width: 100%;
     min-width: auto;
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-md, 14px);
+    min-height: 44px; /* Touch-оптимизация */
   }
 }
 </style>

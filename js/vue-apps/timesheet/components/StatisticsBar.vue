@@ -94,6 +94,11 @@ const formattedTotalHours = computed(() => {
 
 /* Анимация при изменении значения */
 .stat-value {
+  transition: transform var(--transition-fast, 0.15s ease), color var(--transition-normal, 0.2s ease);
+}
+
+/* Анимация при изменении значения (только при обновлении) */
+.stat-value.updating {
   animation: valueChange 0.3s ease;
 }
 
@@ -102,7 +107,7 @@ const formattedTotalHours = computed(() => {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.15);
   }
   100% {
     transform: scale(1);

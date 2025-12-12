@@ -89,39 +89,41 @@ const indicatorClass = computed(() => {
 <style scoped>
 .save-indicator {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 18px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  font-size: 14px;
+  bottom: var(--spacing-lg, 24px);
+  right: var(--spacing-lg, 24px);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+  background-color: var(--color-bg-primary, #fff);
+  border: var(--border-width, 1px) solid var(--color-border, #ddd);
+  border-radius: var(--border-radius-md, 6px);
+  box-shadow: var(--shadow-lg, 0 4px 8px rgba(0, 0, 0, 0.15));
+  font-size: var(--font-size-md, 14px);
   font-weight: 500;
   z-index: 9999;
   min-width: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all var(--transition-normal, 0.2s ease);
 }
 
 .save-indicator.saving {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--color-primary, #2fc6f6);
+  color: var(--color-primary, #2fc6f6);
+  background-color: rgba(47, 198, 246, 0.05);
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 .save-indicator.saved {
-  border-color: var(--color-success);
-  color: var(--color-success);
-  background-color: #f0fdf4;
+  border-color: var(--color-success, #9dcf00);
+  color: var(--color-success, #9dcf00);
+  background-color: rgba(157, 207, 0, 0.1);
   animation: successPulse 0.5s ease;
 }
 
 .save-indicator.error {
-  border-color: var(--color-error);
-  color: var(--color-error);
-  background-color: #fef2f2;
+  border-color: var(--color-error, #ff5752);
+  color: var(--color-error, #ff5752);
+  background-color: rgba(255, 87, 82, 0.1);
   animation: errorShake 0.5s ease;
 }
 
@@ -168,8 +170,8 @@ const indicatorClass = computed(() => {
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(52, 152, 219, 0.3);
-  border-top-color: #3498db;
+  border: 2px solid rgba(47, 198, 246, 0.3);
+  border-top-color: var(--color-primary, #2fc6f6);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

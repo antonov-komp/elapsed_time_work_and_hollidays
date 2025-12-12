@@ -47,62 +47,97 @@ const fullName = computed(() => {
  * Стили компонента информации о пользователе
  * 
  * Соответствуют гайдлайнам Bitrix24
+ * Улучшена стилизация согласно TASK-006-02
  */
 
 .user-info {
-  padding: var(--spacing-md);
-  background-color: #f5f5f5;
-  border-bottom: var(--border-width) solid var(--border-color);
+  padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
+  background: linear-gradient(135deg, var(--color-bg-secondary, #f5f5f5) 0%, var(--color-header-bg, #f9f9f9) 100%);
+  border-bottom: var(--border-width, 1px) solid var(--color-border, #ddd);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
 }
 
 .user-data {
-  font-size: var(--font-size-lg);
-  font-weight: bold;
+  font-size: var(--font-size-lg, 16px);
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-sm, 8px);
+  color: var(--color-text-primary, #333);
 }
 
 .name {
-  color: #333;
+  color: var(--color-text-primary, #333);
+  font-weight: 700;
 }
 
 .separator {
-  color: #999;
-  font-weight: normal;
+  color: var(--color-text-muted, #999);
+  font-weight: 400;
+  margin: 0 var(--spacing-xs, 4px);
 }
 
 .position {
-  color: #666;
-  font-weight: normal;
+  color: var(--color-text-secondary, #666);
+  font-weight: 500;
+  font-size: var(--font-size-md, 14px);
 }
 
 .loading {
-  color: #666;
+  color: var(--color-text-secondary, #666);
   font-style: italic;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-md, 14px);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.loading::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border, #ddd);
+  border-top-color: var(--color-primary, #2fc6f6);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .error {
-  color: var(--color-error);
-  font-size: var(--font-size-md);
+  color: var(--color-error, #ff5752);
+  font-size: var(--font-size-md, 14px);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.error::before {
+  content: '⚠';
+  font-size: var(--font-size-lg, 16px);
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
   .user-info {
-    padding: var(--spacing-sm);
+    padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
   }
   
   .user-data {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-md, 14px);
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-xs, 4px);
   }
   
   .separator {
     display: none;
+  }
+  
+  .position {
+    font-size: var(--font-size-sm, 12px);
   }
 }
 </style>

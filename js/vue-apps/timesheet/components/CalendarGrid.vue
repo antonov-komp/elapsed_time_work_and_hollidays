@@ -144,46 +144,57 @@ function handleCellClick(cellData) {
  * 
  * Использует CSS Grid для создания сетки 7xN (7 дней недели)
  * Соответствует гайдлайнам Bitrix24
+ * Улучшена стилизация согласно TASK-006-01
  */
 
 .calendar-grid {
-  padding: 20px;
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-secondary, #f9f9f9);
+  border-radius: var(--border-radius-lg, 8px);
 }
 
 .grid-container {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  background-color: #e0e0e0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 2px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: var(--spacing-xs, 2px);
+  background-color: var(--color-grid-bg, #e0e0e0);
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--border-radius-md, 6px);
+  padding: var(--spacing-xs, 2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
 .weekday-header {
-  padding: 12px 8px;
-  background-color: #f5f5f5;
-  font-weight: bold;
+  padding: var(--spacing-md, 12px) var(--spacing-sm, 8px);
+  background-color: var(--color-header-bg, #f5f5f5);
+  font-weight: 600;
   text-align: center;
-  font-size: 12px;
-  color: #666;
-  border-bottom: 2px solid #ddd;
+  font-size: var(--font-size-sm, 12px);
+  color: var(--color-text-secondary, #666);
+  border-bottom: 2px solid var(--color-border-accent, #ddd);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-radius: 2px;
+  letter-spacing: 0.8px;
+  border-radius: var(--border-radius-sm, 4px);
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.weekday-header:hover {
+  background-color: var(--color-header-bg-hover, #eeeeee);
 }
 
 .calendar-cell.empty {
-  background-color: #fafafa;
+  background-color: var(--color-empty-bg, #fafafa);
   min-height: 80px;
   cursor: default;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border-light, #e0e0e0);
+  border-radius: var(--border-radius-sm, 4px);
 }
 
 .calendar-cell.empty:hover {
-  background-color: #fafafa;
-  border-color: #e0e0e0;
+  background-color: var(--color-empty-bg, #fafafa);
+  border-color: var(--color-border-light, #e0e0e0);
   transform: none;
   box-shadow: none;
 }
@@ -191,7 +202,7 @@ function handleCellClick(cellData) {
 /* Адаптивность для планшетов */
 @media (max-width: 1024px) and (min-width: 769px) {
   .calendar-grid {
-    padding: var(--spacing-md);
+    padding: var(--spacing-md, 16px);
   }
   
   .grid-container {
@@ -199,15 +210,15 @@ function handleCellClick(cellData) {
   }
   
   .weekday-header {
-    padding: var(--spacing-sm) var(--spacing-xs);
-    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm, 8px) var(--spacing-xs, 4px);
+    font-size: var(--font-size-sm, 12px);
   }
 }
 
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   .calendar-grid {
-    padding: var(--spacing-sm);
+    padding: var(--spacing-sm, 8px);
   }
   
   .grid-container {
@@ -216,8 +227,8 @@ function handleCellClick(cellData) {
   }
   
   .weekday-header {
-    padding: var(--spacing-sm) var(--spacing-xs);
-    font-size: var(--font-size-xs);
+    padding: var(--spacing-sm, 8px) var(--spacing-xs, 4px);
+    font-size: var(--font-size-xs, 11px);
     min-height: 44px; /* Touch-оптимизация */
     display: flex;
     align-items: center;

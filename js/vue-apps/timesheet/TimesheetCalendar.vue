@@ -233,22 +233,35 @@ watch(
   flex-wrap: wrap;
 }
 
+/* Адаптивность для планшетов */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .timesheet-calendar {
+    padding: var(--spacing-md, 16px);
+    max-width: 100%;
+  }
+  
+  .calendar-controls {
+    gap: var(--spacing-md, 16px);
+  }
+}
+
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   .timesheet-calendar {
-    padding: 15px;
+    padding: var(--spacing-sm, 8px);
+    max-width: 100%;
   }
   
   .calendar-controls {
     flex-direction: column;
     align-items: stretch;
-    gap: 15px;
+    gap: var(--spacing-sm, 8px);
   }
 }
 
 @media (max-width: 480px) {
   .timesheet-calendar {
-    padding: 10px;
+    padding: var(--spacing-xs, 4px);
   }
 }
 </style>

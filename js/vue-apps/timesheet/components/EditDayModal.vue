@@ -226,61 +226,68 @@ function handleOverlayClick(event) {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.55);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10000;
-  animation: fadeIn var(--transition-normal);
-  backdrop-filter: blur(2px);
+  animation: fadeIn var(--transition-slow, 0.3s ease);
+  backdrop-filter: blur(3px);
 }
 
 .modal-content {
-  background-color: #fff;
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-lg);
+  background-color: var(--color-bg-primary, #fff);
+  border-radius: var(--border-radius-lg, 8px);
+  padding: var(--spacing-lg, 24px);
   min-width: 400px;
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
-  animation: slideIn var(--transition-slow);
-  box-shadow: var(--shadow-lg);
+  animation: slideIn var(--transition-slow, 0.3s ease);
+  box-shadow: var(--shadow-lg, 0 4px 8px rgba(0, 0, 0, 0.15));
   transform-origin: center;
+  border: var(--border-width, 1px) solid var(--color-border, #ddd);
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #ddd;
+  margin-bottom: var(--spacing-lg, 24px);
+  padding-bottom: var(--spacing-md, 16px);
+  border-bottom: var(--border-width, 1px) solid var(--color-border, #ddd);
 }
 
 .modal-header h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--font-size-xl, 18px);
   font-weight: 600;
-  color: #333;
+  color: var(--color-text-primary, #333);
 }
 
 .close-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: var(--font-size-xxl, 24px);
   cursor: pointer;
-  color: #999;
+  color: var(--color-text-muted, #999);
   padding: 0;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s;
+  transition: all var(--transition-fast, 0.15s ease);
+  border-radius: var(--border-radius-sm, 2px);
 }
 
 .close-button:hover {
-  color: #333;
+  color: var(--color-text-primary, #333);
+  background-color: var(--color-bg-secondary, #f5f5f5);
+}
+
+.close-button:active {
+  transform: scale(0.9);
 }
 
 .modal-form {
@@ -303,31 +310,36 @@ function handleOverlayClick(event) {
 
 .form-input,
 .form-select {
-  padding: var(--spacing-sm);
-  border: var(--border-width) solid var(--border-color);
-  border-radius: var(--border-radius-md);
-  font-size: var(--font-size-md);
-  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+  border: var(--border-width, 1px) solid var(--color-border, #ddd);
+  border-radius: var(--border-radius-md, 4px);
+  font-size: var(--font-size-md, 14px);
+  background-color: var(--color-bg-primary, #fff);
+  color: var(--color-text-primary, #333);
+  transition: all var(--transition-normal, 0.2s ease);
   min-height: 44px; /* Touch-оптимизация */
+  width: 100%;
 }
 
 .form-input:focus,
 .form-select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(47, 198, 246, 0.2);
+  border-color: var(--color-primary, #2fc6f6);
+  box-shadow: 0 0 0 3px rgba(47, 198, 246, 0.15);
 }
 
 .form-input:disabled,
 .form-select:disabled {
-  background-color: #f5f5f5;
+  background-color: var(--color-bg-secondary, #f5f5f5);
   cursor: not-allowed;
   opacity: 0.6;
+  color: var(--color-text-muted, #999);
 }
 
 .form-input.error,
 .form-select.error {
-  border-color: var(--color-error);
+  border-color: var(--color-error, #ff5752);
+  box-shadow: 0 0 0 2px rgba(255, 87, 82, 0.15);
 }
 
 .error-message {
@@ -371,12 +383,14 @@ function handleOverlayClick(event) {
 }
 
 .btn-secondary {
-  background-color: #e0e0e0;
-  color: #333;
+  background-color: var(--color-bg-secondary, #e0e0e0);
+  color: var(--color-text-primary, #333);
+  border: var(--border-width, 1px) solid var(--color-border, #ddd);
 }
 
 .btn-secondary:hover {
-  background-color: #d0d0d0;
+  background-color: var(--color-header-bg-hover, #d0d0d0);
+  border-color: var(--color-border-accent, #ccc);
 }
 
 @keyframes fadeIn {
