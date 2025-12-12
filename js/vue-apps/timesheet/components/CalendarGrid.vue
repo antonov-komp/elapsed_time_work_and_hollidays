@@ -1,8 +1,6 @@
 <template>
   <div class="calendar-grid">
-    <div v-if="loading" class="loading">Загрузка данных...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else class="grid-container">
+    <div class="grid-container">
       <!-- Заголовки дней недели -->
       <div class="weekday-header" v-for="weekday in WEEKDAYS_SHORT" :key="weekday">
         {{ weekday }}
@@ -36,41 +34,58 @@
  * 
  * Отображает все дни месяца в виде сетки
  * Интегрирует CalendarCell для каждого дня
- * Загружает данные табеля и праздников
+ * Получает данные табеля и праздников через props из Store
  * Определяет тип дня (рабочий, выходной, праздник)
  * 
  * Использует:
- * - TimesheetApiService для загрузки данных табеля
- * - HolidaysService для загрузки праздников
  * - dateHelpers для работы с датами
+ * - Данные из Store через props
  */
 
-import { ref, computed, watch, onMounted } from 'vue';
+import { computed } from 'vue';
 import CalendarCell from './CalendarCell.vue';
-import { TimesheetApiService } from '../services/TimesheetApiService.js';
-import { HolidaysService } from '../services/HolidaysService.js';
-import { getDaysInMonth, isWeekend, formatDateForComparison } from '../utils/dateHelpers.js';
+import { getDaysInMonth, isWeekend, formatDateForComparison, isHoliday } from '../utils/dateHelpers.js';
 import { WEEKDAYS_SHORT } from '../utils/constants.js';
 
 const props = defineProps({
+  /**
+   * Год для отображения
+   */
   year: {
     type: Number,
     required: true
   },
+  /**
+   * Месяц для отображения (1-12)
+   */
   month: {
     type: Number,
     required: true
+  },
+  /**
+   * Данные табеля (объект с ключами-днями в формате числа дня)
+   * Структура: { 1: { hours: 8, status: null }, 2: { hours: 0, status: 'Больничный' }, ... }
+   */
+  timesheetData: {
+    type: Object,
+    default: () => ({})
+  },
+  /**
+   * Массив праздников (массив дат в формате YYYY-MM-DD)
+   */
+  holidays: {
+    type: Array,
+    default: () => []
   }
 });
 
 const emit = defineEmits(['cell-click']);
 
-const loading = ref(false);
-const error = ref(null);
-const timesheetData = ref({});
-const holidays = ref([]);
-
-// Генерация массива дней месяца
+/**
+ * Генерация массива дней месяца
+ * 
+ * Создаёт массив объектов для каждого дня месяца с данными из табеля
+ */
 const daysArray = computed(() => {
   const days = [];
   const daysInMonth = getDaysInMonth(props.year, props.month);
@@ -78,22 +93,29 @@ const daysArray = computed(() => {
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(props.year, props.month - 1, day);
     const dateStr = formatDateForComparison(date);
-    const dayData = timesheetData.value[dateStr] || null;
+    const dayData = props.timesheetData[day] || null;
     const isWeekendDay = isWeekend(date);
+    const isHolidayDay = isHoliday(date, props.holidays);
     
     days.push({
       dayNumber: day,
       date: date,
       dateStr: dateStr,
       dayData: dayData,
-      isWeekend: isWeekendDay
+      isWeekend: isWeekendDay,
+      isHoliday: isHolidayDay
     });
   }
   
   return days;
 });
 
-// Пустые ячейки до начала месяца (для выравнивания)
+/**
+ * Пустые ячейки до начала месяца (для выравнивания)
+ * 
+ * Вычисляет количество пустых ячеек для выравнивания первого дня месяца
+ * с правильным днём недели (понедельник = 0, воскресенье = 6)
+ */
 const emptyDaysBefore = computed(() => {
   const firstDay = new Date(props.year, props.month - 1, 1);
   const dayOfWeek = firstDay.getDay(); // 0 = воскресенье, 1 = понедельник, ..., 6 = суббота
@@ -104,75 +126,21 @@ const emptyDaysBefore = computed(() => {
   return mondayBasedDay;
 });
 
-// Загрузка данных табеля
-const loadTimesheetData = async () => {
-  try {
-    loading.value = true;
-    error.value = null;
-    
-    const data = await TimesheetApiService.getTimesheet(props.year, props.month);
-    
-    // Преобразуем данные в формат { 'YYYY-MM-DD': { hours, status } }
-    if (data && data.days) {
-      timesheetData.value = data.days;
-    } else {
-      timesheetData.value = {};
-    }
-  } catch (e) {
-    error.value = e.message || 'Ошибка загрузки данных табеля';
-    console.error('CalendarGrid loadTimesheetData error:', e);
-    timesheetData.value = {};
-  } finally {
-    loading.value = false;
-  }
-};
-
-// Загрузка праздников
-const loadHolidays = async () => {
-  try {
-    const holidaysData = await HolidaysService.getHolidays(props.year);
-    holidays.value = holidaysData || [];
-  } catch (e) {
-    console.error('CalendarGrid loadHolidays error:', e);
-    holidays.value = [];
-  }
-};
-
-// Обработка клика по ячейке
-const handleCellClick = (cellData) => {
-  emit('cell-click', cellData);
-};
-
-// Загрузка данных при изменении года/месяца
-watch([() => props.year, () => props.month], async () => {
-  await Promise.all([
-    loadTimesheetData(),
-    loadHolidays()
-  ]);
-}, { immediate: false });
-
-// Загрузка данных при монтировании
-onMounted(async () => {
-  await Promise.all([
-    loadTimesheetData(),
-    loadHolidays()
-  ]);
-});
+/**
+ * Обработка клика по ячейке
+ * 
+ * Эмитит событие с данными дня для открытия модального окна редактирования
+ * 
+ * @param {Object} cellData - Данные ячейки (dayNumber, date, dayData)
+ */
+function handleCellClick(cellData) {
+  emit('cell-click', cellData.dayNumber, cellData.date, cellData.dayData);
+}
 </script>
 
 <style scoped>
 .calendar-grid {
   padding: 20px;
-}
-
-.loading,
-.error {
-  padding: 20px;
-  text-align: center;
-}
-
-.error {
-  color: #dc3545;
 }
 
 .grid-container {
@@ -181,6 +149,8 @@ onMounted(async () => {
   gap: 1px;
   background-color: #ddd;
   border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .weekday-header {
@@ -191,6 +161,8 @@ onMounted(async () => {
   font-size: 12px;
   color: #666;
   border-bottom: 2px solid #ddd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .calendar-cell.empty {
@@ -203,5 +175,20 @@ onMounted(async () => {
   background-color: #fafafa;
   border-color: #ddd;
 }
-</style>
 
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .calendar-grid {
+    padding: 10px;
+  }
+  
+  .grid-container {
+    gap: 0;
+  }
+  
+  .weekday-header {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+}
+</style>

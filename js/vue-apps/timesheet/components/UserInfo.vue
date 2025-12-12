@@ -1,11 +1,11 @@
 <template>
   <div class="user-info">
-    <div v-if="loading" class="loading">Загрузка...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
+    <div v-if="store.user.loading" class="loading">Загрузка...</div>
+    <div v-else-if="store.user.error" class="error">{{ store.user.error }}</div>
     <div v-else class="user-data">
       <span class="name">{{ fullName }}</span>
-      <span v-if="position" class="separator">|</span>
-      <span v-if="position" class="position">{{ position }}</span>
+      <span v-if="store.user.position" class="separator">|</span>
+      <span v-if="store.user.position" class="position">{{ store.user.position }}</span>
     </div>
   </div>
 </template>
@@ -15,45 +15,30 @@
  * Компонент информации о пользователе
  * 
  * Отображает ФИО и должность текущего пользователя из Bitrix24
- * Использует Bitrix24ApiService для получения данных
+ * Использует Store для получения данных пользователя
  * 
  * Метод Bitrix24 API: user.current
  * Документация: https://context7.com/bitrix24/rest/user.current
  */
 
-import { ref, onMounted } from 'vue';
-import { Bitrix24ApiService } from '../services/Bitrix24ApiService.js';
+import { computed } from 'vue';
+import { useTimesheetStore } from '../stores/timesheetStore.js';
 
-const loading = ref(true);
-const error = ref(null);
-const fullName = ref('');
-const position = ref('');
+const store = useTimesheetStore();
 
-onMounted(async () => {
-  try {
-    loading.value = true;
-    error.value = null;
-    
-    const user = await Bitrix24ApiService.getCurrentUser();
-    
-    // Формирование ФИО из LAST_NAME, NAME, SECOND_NAME
-    const nameParts = [
-      user.LAST_NAME,
-      user.NAME,
-      user.SECOND_NAME
-    ].filter(Boolean);
-    
-    fullName.value = nameParts.length > 0 
-      ? nameParts.join(' ') 
-      : `Пользователь #${user.ID}`;
-    
-    position.value = user.WORK_POSITION || '';
-  } catch (e) {
-    error.value = e.message || 'Ошибка загрузки данных пользователя';
-    console.error('UserInfo component error:', e);
-  } finally {
-    loading.value = false;
+/**
+ * Полное имя пользователя
+ * 
+ * Формируется из данных пользователя в Store
+ */
+const fullName = computed(() => {
+  if (store.user.name) {
+    return store.user.name;
   }
+  if (store.user.id) {
+    return `Пользователь #${store.user.id}`;
+  }
+  return 'Пользователь';
 });
 </script>
 
@@ -93,4 +78,3 @@ onMounted(async () => {
   font-size: 14px;
 }
 </style>
-
