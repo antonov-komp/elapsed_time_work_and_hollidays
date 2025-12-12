@@ -285,3 +285,4 @@ ls -la node_modules/vue/
 - **Этапы реализации:** [DOCS/TZ/implementation-stages.md](../TZ/implementation-stages.md)
 - **Архитектура:** [DOCS/ARCHITECTURE/tech-stack.md](../ARCHITECTURE/tech-stack.md)
 
+

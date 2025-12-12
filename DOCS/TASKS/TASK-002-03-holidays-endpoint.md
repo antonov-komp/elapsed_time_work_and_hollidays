@@ -329,3 +329,4 @@ curl "http://localhost/api/holidays.php?year=2025" | jq '.data'
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 5.3.1, 5.2.1
 - **Связанная задача:** [TASK-001-04](../TASKS/TASK-001-04-holidays-config.md)
 
+

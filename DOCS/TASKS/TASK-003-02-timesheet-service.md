@@ -323,3 +323,4 @@ TimesheetApiService.saveTimesheet(2025, 12, days)
 - **Предыдущий подэтап:** [TASK-003-01](TASK-003-01-bitrix24-service.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 10.1, 5.2
 
+

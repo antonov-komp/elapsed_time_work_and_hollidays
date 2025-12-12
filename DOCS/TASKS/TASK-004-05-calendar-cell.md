@@ -411,3 +411,4 @@ function handleCellClick(day, date, dayData) {
 - **Родительская задача:** [TASK-004](TASK-004-basic-vue-components.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 2.1, 2.2, 2.3
 
+

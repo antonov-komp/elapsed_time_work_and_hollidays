@@ -385,3 +385,4 @@ function handleCellClick(day, date, dayData) {
 - **Предыдущий подэтап:** [TASK-004-05](TASK-004-05-calendar-cell.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - раздел 2
 
+

@@ -281,3 +281,4 @@ import UserInfo from './components/UserInfo.vue';
 - **Предыдущий подэтап:** [TASK-004-01](TASK-004-01-preloader.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - раздел 1.1
 
+

@@ -495,3 +495,4 @@ var_dump($validation->validateDayEntry(['hours' => 8.0, 'status' => 'Больн�
 - **Родительская задача:** [TASK-002](TASK-002-backend-api.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 7.2, 5.2.1
 
+

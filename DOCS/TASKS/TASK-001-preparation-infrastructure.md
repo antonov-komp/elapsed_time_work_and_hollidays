@@ -470,3 +470,4 @@ app.mount('#vue-timesheet-app');
 - **Руководство по Vue.js:** [DOCS/GUIDES/vue-development.md](../GUIDES/vue-development.md)
 - **Архитектура:** [DOCS/ARCHITECTURE/tech-stack.md](../ARCHITECTURE/tech-stack.md)
 
+

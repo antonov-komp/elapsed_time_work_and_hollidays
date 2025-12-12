@@ -321,3 +321,4 @@ ls -la dist/
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md)
 - **Руководство по Vue.js:** [DOCS/GUIDES/vue-development.md](../GUIDES/vue-development.md)
 
+

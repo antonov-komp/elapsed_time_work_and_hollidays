@@ -260,3 +260,4 @@
 - **Родительская задача:** [TASK-006](TASK-006-styling-adaptivity.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 3, 2.1, 2.2, 2.3
 
+

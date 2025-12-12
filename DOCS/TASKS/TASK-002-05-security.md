@@ -386,3 +386,4 @@ var_dump($path); // должен вернуть null или безопасный
 - **Родительская задача:** [TASK-002](TASK-002-backend-api.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 10.5, 5.2.1
 
+

@@ -280,3 +280,4 @@ onMounted(async () => {
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 10.1, 5.2
 - **Справочник API:** [DOCS/API-REFERENCES/bitrix24-rest-api.md](../API-REFERENCES/bitrix24-rest-api.md)
 
+

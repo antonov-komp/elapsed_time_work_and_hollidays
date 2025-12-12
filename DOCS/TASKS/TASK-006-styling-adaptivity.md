@@ -339,3 +339,4 @@
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 3, 10.4, 10.6
 - **Этапы реализации:** [DOCS/TZ/implementation-stages.md](../TZ/implementation-stages.md) - Этап 6
 
+

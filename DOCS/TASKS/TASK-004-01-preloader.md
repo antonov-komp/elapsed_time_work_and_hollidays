@@ -233,3 +233,4 @@ async function loadData() {
 - **Родительская задача:** [TASK-004](TASK-004-basic-vue-components.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - раздел 1.2
 
+

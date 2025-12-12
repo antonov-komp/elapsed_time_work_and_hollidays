@@ -487,3 +487,4 @@ cat data/{user_id}/2025/12/data.json
 - **Предыдущий подэтап:** [TASK-002-01](TASK-002-01-get-timesheet-endpoint.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 4.1, 4.2, 5.2.1
 
+

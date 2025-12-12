@@ -349,3 +349,4 @@ grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' config/holidays-rb.json | head -5
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - раздел 5.3.1
 - **Этапы реализации:** [DOCS/TZ/implementation-stages.md](../TZ/implementation-stages.md)
 
+

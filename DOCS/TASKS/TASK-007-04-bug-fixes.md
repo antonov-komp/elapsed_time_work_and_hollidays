@@ -232,3 +232,4 @@ function validateHours(hours) {
 - **Родительская задача:** [TASK-007](TASK-007-testing-documentation.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 10.3, 10.4
 
+

@@ -266,3 +266,4 @@ console.log('Hour step:', CONFIG.HOUR_STEP); // 0.5
 - **Родительская задача:** [TASK-003](TASK-003-services-utilities.md)
 - **Техническое задание:** [DOCS/TZ/interface-timesheet-calendar.md](../TZ/interface-timesheet-calendar.md) - разделы 10.1, 3.4
 
+
