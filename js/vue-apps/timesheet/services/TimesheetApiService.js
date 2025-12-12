@@ -28,7 +28,14 @@ export class TimesheetApiService {
                 throw new Error('Месяц должен быть в диапазоне 1-12');
             }
             
-            const url = `/api/timesheet.php?year=${year}&month=${month}`;
+            // Получаем токен пользователя из placement (если доступен)
+            const authId = window.PLACEMENT_AUTH_ID || null;
+            
+            let url = `/api/timesheet.php?year=${year}&month=${month}`;
+            if (authId) {
+                url += '&AUTH_ID=' + encodeURIComponent(authId);
+            }
+            
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -80,7 +87,14 @@ export class TimesheetApiService {
                 throw new Error('Данные дней должны быть объектом');
             }
             
-            const url = `/api/timesheet.php?year=${year}&month=${month}`;
+            // Получаем токен пользователя из placement (если доступен)
+            const authId = window.PLACEMENT_AUTH_ID || null;
+            
+            let url = `/api/timesheet.php?year=${year}&month=${month}`;
+            if (authId) {
+                url += '&AUTH_ID=' + encodeURIComponent(authId);
+            }
+            
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {

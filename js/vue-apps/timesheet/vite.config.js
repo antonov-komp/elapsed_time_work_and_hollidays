@@ -4,6 +4,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [vue()],
+  base: '/js/vue-apps/timesheet/dist/',
   resolve: {
     alias: {
       '@': resolve(__dirname, '.')

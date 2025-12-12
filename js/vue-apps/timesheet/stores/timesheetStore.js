@@ -343,9 +343,19 @@ export const useTimesheetStore = defineStore('timesheet', {
       const maxAttempts = 3;
       const retryDelay = 1000; // 1 секунда между попытками
       
+      // Логирование для отладки
+      console.log('Store _autoSaveInternal: начало сохранения', {
+        year: year,
+        month: month,
+        daysCount: Object.keys(days).length,
+        days: days
+      });
+      
       while (attempts < maxAttempts) {
         try {
-          await TimesheetApiService.saveTimesheet(year, month, days);
+          const result = await TimesheetApiService.saveTimesheet(year, month, days);
+          
+          console.log('Store _autoSaveInternal: сохранение успешно', result);
           
           // Успешное сохранение
           this.timesheet.lastSaved = new Date();
@@ -353,6 +363,8 @@ export const useTimesheetStore = defineStore('timesheet', {
           return;
         } catch (error) {
           attempts++;
+          
+          console.error('Store _autoSaveInternal: ошибка сохранения (попытка', attempts, 'из', maxAttempts, '):', error);
           
           if (attempts >= maxAttempts) {
             // Все попытки исчерпаны
@@ -413,17 +425,27 @@ export const useTimesheetStore = defineStore('timesheet', {
         return;
       }
       
-      // Обновление локального состояния
+      // Логирование для отладки
+      console.log('Store updateDay:', {
+        day: day,
+        dayData: dayData,
+        year: this.timesheet.year,
+        month: this.timesheet.month,
+        currentDaysCount: Object.keys(this.timesheet.days).length
+      });
+      
+      // Обновление локального состояния - обновляем только один день
       this.timesheet.days = {
         ...this.timesheet.days,
         [day]: dayData
       };
       
       // Автосохранение с debounce
+      // Передаём только изменённый день, бэкенд объединит с существующими данными
       this.autoSave(
         this.timesheet.year,
         this.timesheet.month,
-        this.timesheet.days
+        { [day]: dayData } // Передаём только изменённый день
       );
     },
     

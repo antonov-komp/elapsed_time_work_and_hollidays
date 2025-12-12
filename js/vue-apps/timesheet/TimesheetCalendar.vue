@@ -31,6 +31,7 @@
     />
     
     <EditDayModal
+      v-if="store.isEditModalOpen && store.getEditModal.day"
       :visible="store.isEditModalOpen"
       :day="store.getEditModal.day"
       :day-data="selectedDayData"
@@ -69,9 +70,10 @@ import StatisticsBar from './components/StatisticsBar.vue';
 import CalendarGrid from './components/CalendarGrid.vue';
 import FillWeekButton from './components/FillWeekButton.vue';
 
-// Ленивая загрузка модального окна (загружается только при открытии)
-import { defineAsyncComponent } from 'vue';
-const EditDayModal = defineAsyncComponent(() => import('./components/EditDayModal.vue'));
+// Модальное окно редактирования дня
+// Временно отключаем ленивую загрузку из-за проблем с путями в production
+// TODO: Включить ленивую загрузку после исправления путей в Vite
+import EditDayModal from './components/EditDayModal.vue';
 
 const store = useTimesheetStore();
 
@@ -121,7 +123,20 @@ async function handlePeriodChange(year, month) {
  * @param {Object|null} dayData - Данные дня (часы, статус)
  */
 function handleCellClick(day, date, dayData) {
+  // Логирование для отладки
+  console.log('TimesheetCalendar.handleCellClick:', {
+    day: day,
+    date: date,
+    dayData: dayData
+  });
+  
   store.openEditModal(day, store.timesheet.year, store.timesheet.month);
+  
+  // Логирование после открытия
+  console.log('TimesheetCalendar.handleCellClick: модальное окно открыто', {
+    isOpen: store.isEditModalOpen,
+    modal: store.getEditModal
+  });
 }
 
 /**
@@ -129,14 +144,48 @@ function handleCellClick(day, date, dayData) {
  * 
  * Обновляет данные дня через Store (автосохранение сработает автоматически)
  * 
- * @param {Object} dayData - Данные дня (часы, статус)
+ * @param {Object} payload - Объект с полями day (номер дня) и dayData (данные дня)
  */
-function handleSaveDay(dayData) {
-  const modal = store.getEditModal;
-  if (modal.open && modal.day) {
-    store.updateDay(modal.day, dayData);
-    store.closeEditModal();
+function handleSaveDay(payload) {
+  // Поддержка старого формата (только dayData) для обратной совместимости
+  let day, dayData;
+  
+  if (payload && typeof payload === 'object' && 'day' in payload && 'dayData' in payload) {
+    // Новый формат: { day: number, dayData: { hours, status } }
+    day = payload.day;
+    dayData = payload.dayData;
+  } else {
+    // Старый формат: только dayData, день берём из модального окна
+    dayData = payload;
+    const modal = store.getEditModal;
+    day = modal?.day;
+    
+    if (!day) {
+      console.warn('TimesheetCalendar.handleSaveDay: день не указан', {
+        payload: payload,
+        modal: modal
+      });
+      return;
+    }
   }
+  
+  // Валидация дня
+  if (!day || day < 1 || day > 31) {
+    console.error('TimesheetCalendar.handleSaveDay: неверный номер дня', day);
+    return;
+  }
+  
+  // Логирование для отладки
+  console.log('TimesheetCalendar.handleSaveDay:', {
+    day: day,
+    dayData: dayData
+  });
+  
+  // Обновляем данные дня
+  store.updateDay(day, dayData);
+  
+  // Закрываем модальное окно
+  store.closeEditModal();
 }
 
 /**

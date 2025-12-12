@@ -59,7 +59,82 @@ function logError(string $message, array $context = []): void
 
 try {
     // Получение данных пользователя из Bitrix24
-    $user = CRest::call('user.current');
+    // В контексте placement используем токен из AUTH_ID (текущий пользователь)
+    // Если AUTH_ID не передан, используем сохранённый токен (владелец приложения)
+    $userToken = null;
+    
+    // Проверяем токен в GET параметрах (из JavaScript fetch)
+    if (!empty($_GET['AUTH_ID'])) {
+        $userToken = htmlspecialchars($_GET['AUTH_ID']);
+    }
+    // Также проверяем в $_REQUEST (на случай, если передано через POST)
+    elseif (!empty($_REQUEST['AUTH_ID'])) {
+        $userToken = htmlspecialchars($_REQUEST['AUTH_ID']);
+    }
+    
+    // Получение данных пользователя
+    if ($userToken !== null) {
+        // Получаем endpoint из константы или файла настроек
+        $endpoint = null;
+        
+        // Проверяем константу C_REST_WEB_HOOK_URL
+        if (defined('C_REST_WEB_HOOK_URL') && !empty(C_REST_WEB_HOOK_URL)) {
+            $endpoint = C_REST_WEB_HOOK_URL;
+        } else {
+            // Читаем из settings.json
+            $settingsFile = __DIR__ . '/../settings.json';
+            if (file_exists($settingsFile)) {
+                $settingsData = json_decode(file_get_contents($settingsFile), true);
+                if (!empty($settingsData['client_endpoint'])) {
+                    $endpoint = $settingsData['client_endpoint'];
+                }
+            }
+        }
+        
+        if (empty($endpoint)) {
+            throw new Exception('Не настроено подключение к Bitrix24 (endpoint не найден)');
+        }
+        
+        // Убеждаемся, что endpoint заканчивается на /
+        if (substr($endpoint, -1) !== '/') {
+            $endpoint .= '/';
+        }
+        
+        // Формируем URL для запроса
+        $url = $endpoint . 'user.current.json';
+        
+        // Выполняем запрос с токеном пользователя
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(['auth' => $userToken]));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Bitrix24 CRest PHP');
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
+        curl_close($ch);
+        
+        if ($curlError) {
+            throw new Exception("CURL error: {$curlError}");
+        }
+        
+        if ($httpCode !== 200) {
+            throw new Exception("HTTP error! status: {$httpCode}, response: {$response}");
+        }
+        
+        $user = json_decode($response, true);
+        
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception("JSON decode error: " . json_last_error_msg());
+        }
+    } else {
+        // Используем стандартный метод CRest (токен владельца)
+        $user = CRest::call('user.current');
+    }
     
     if (empty($user['result']) || !isset($user['result']['ID'])) {
         throw new Exception('Не удалось получить данные пользователя из Bitrix24');

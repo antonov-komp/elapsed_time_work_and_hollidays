@@ -134,7 +134,8 @@ const emptyDaysBefore = computed(() => {
  * @param {Object} cellData - Данные ячейки (dayNumber, date, dayData)
  */
 function handleCellClick(cellData) {
-  emit('cell-click', cellData.dayNumber, cellData.date, cellData.dayData);
+  // CalendarCell передаёт объект с полями: day, date, dayData
+  emit('cell-click', cellData.day, cellData.date, cellData.dayData);
 }
 </script>
 

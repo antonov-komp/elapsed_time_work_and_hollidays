@@ -137,6 +137,13 @@ function validateHoursInput() {
     return;
   }
   
+  // Если часы не указаны (0 или пусто), не валидируем (день может быть пустым)
+  if (!localHours.value || localHours.value === 0) {
+    hoursError.value = null;
+    validateDayEntryRule();
+    return;
+  }
+  
   const errors = validateHours(localHours.value);
   if (errors.length > 0) {
     hoursError.value = errors[0]; // Показываем первую ошибку
@@ -189,21 +196,59 @@ function validateDayEntryRule() {
 
 // Обработка сохранения
 function handleSave() {
+  // Проверяем, что модальное окно видимо
+  if (!props.visible) {
+    console.warn('EditDayModal.handleSave: модальное окно не видимо');
+    return;
+  }
+  
+  // Проверяем, что день указан
+  if (!props.day || props.day < 1 || props.day > 31) {
+    console.error('EditDayModal.handleSave: неверный номер дня', props.day);
+    return;
+  }
+  
   // Финальная валидация перед сохранением
   validateHoursInput();
   validateStatusInput();
   
-  if (!isValid.value) {
+  // Проверяем валидность только если есть данные для сохранения
+  // День может быть пустым (часы = 0, статус = null)
+  const hasDataToSave = (localHours.value > 0) || (localStatus.value !== null);
+  
+  if (hasDataToSave && !isValid.value) {
+    // Если есть данные, но они невалидны - не сохраняем
     return;
   }
   
+  // Формируем данные для сохранения
+  // Если есть статус - часы = 0, если есть часы - статус = null
   const dayData = {
-    hours: hasStatus.value ? 0 : localHours.value,
-    status: hasHours.value ? null : localStatus.value
+    hours: hasStatus.value ? 0 : (localHours.value || 0),
+    status: hasHours.value ? null : (localStatus.value || null)
   };
   
-  emit('save', dayData);
-  handleClose();
+  // Сохраняем день в локальную переменную, чтобы не зависеть от props при закрытии
+  const dayToSave = props.day;
+  
+  // Логирование для отладки
+  console.log('EditDayModal.handleSave: сохранение дня', {
+    day: dayToSave,
+    propsDay: props.day,
+    dayData: dayData
+  });
+  
+  // Передаём день вместе с данными, чтобы не зависеть от состояния модального окна
+  emit('save', {
+    day: dayToSave,
+    dayData: dayData
+  });
+  
+  // Закрываем модальное окно после отправки события
+  // Используем setTimeout, чтобы событие успело обработаться
+  setTimeout(() => {
+    handleClose();
+  }, 0);
 }
 
 // Обработка закрытия

@@ -12,7 +12,7 @@ export class Bitrix24ApiService {
      */
     static async getCurrentUser() {
         try {
-            // Использование BX.ajax (если доступен)
+            // Использование BX.ajax (если доступен в Bitrix24)
             if (typeof BX !== 'undefined' && BX.ajax) {
                 return new Promise((resolve, reject) => {
                     BX.ajax({
@@ -34,30 +34,57 @@ export class Bitrix24ApiService {
                         },
                         onfailure: (error) => {
                             console.error('Bitrix24ApiService.getCurrentUser BX.ajax error:', error);
-                            reject(new Error('Ошибка запроса к Bitrix24 API'));
+                            // Fallback на PHP endpoint при ошибке BX.ajax
+                            this.getCurrentUserViaApi().then(resolve).catch(reject);
                         }
                     });
                 });
             }
             
-            // Fallback: использование fetch
-            const response = await fetch('/rest/user.current.json');
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.error) {
-                throw new Error(data.error_description || data.error);
-            }
-            
-            return data.result;
+            // Fallback: использование PHP endpoint через fetch
+            return await this.getCurrentUserViaApi();
         } catch (error) {
             console.error('Bitrix24ApiService.getCurrentUser error:', error);
             throw error;
         }
+    }
+    
+    /**
+     * Получение данных пользователя через PHP API endpoint
+     * 
+     * Передаёт токен пользователя из placement (AUTH_ID) если доступен
+     * 
+     * @returns {Promise<Object>} Данные пользователя
+     * @private
+     */
+    static async getCurrentUserViaApi() {
+        // Получаем токен пользователя из placement (если доступен)
+        const authId = window.PLACEMENT_AUTH_ID || null;
+        
+        // Формируем URL с токеном пользователя
+        let url = '/api/user.php';
+        if (authId) {
+            url += '?AUTH_ID=' + encodeURIComponent(authId);
+        }
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.success || data.error) {
+            throw new Error(data.error_description || data.error || 'Ошибка получения данных пользователя');
+        }
+        
+        return data.result;
     }
 }
 
